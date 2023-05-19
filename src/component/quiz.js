@@ -1,53 +1,51 @@
-import React, { useState } from 'react'
-import QuizData from '../Data/quizData';
-import QuizResult from './QuizResult';
-function Quiz() {
-    const [currentQuestion,setCurrentQuestion]=useState(0);
-   
-    const [showResult,setShowResult]=useState(false);
-    
-    const changeQuestion = ()=>{
-        updateScore();
-        if(currentQuestion< QuizData.length-1){
-            setCurrentQuestion(currentQuestion+1);
-            setClickedOption(0);
-        }else{
-            setShowResult(true)
-    
-    }
-  return (
-    <div>
-        <p className="heading-txt">Quiz APP</p>
-        <div className="container">
-            {showResult ? (
-                <QuizResult score={score} totalScore={QuizData.length} tryAgain={resetAll}/>
-            ):(
-            <>
-            <div className="question">
-                <span id="question-number">{currentQuestion+1}. </span>
-                <span id="question-txt">{QuizData[currentQuestion].question}</span>
-            </div>
-            <div className="option-container">
-                {QuizData[currentQuestion].options.map((option,i)=>{
-                    return(
-                        <button 
-                        // className="option-btn"
-                        className={`option-btn ${
-                            clickedOption == i+1?"checked":null
-                        }`}
-                        key={i}
-                        onClick={()=>setClickedOption(i+1)}
-                        >
-                        {option}
-                        </button>
-                    )
-                })}                
-            </div>
-            <input type="button" value="Next" id="next-button" onClick={changeQuestion}/>
-            </>)}
-        </div>
-    </div>
-  )
-}
+import './quiz.css'
+import { useState } from 'react';
 
-export default Quiz
+const Quiz = ({ ashish }) => {
+
+    const [index, setIndex] = useState(0)
+    const [showScore, setShowScore] = useState(false)
+    const [score, setScore] = useState(0)
+
+    const handlAns = (isCorrect) => {
+if(isCorrect === true){
+    setScore(index+1)
+}
+        const nextQuestion = index + 1;
+        if (nextQuestion < ashish.length) {
+            setIndex(nextQuestion)
+        }else{
+            setShowScore(true)
+        }
+
+    }
+
+    return (
+
+        <div className="main-box">
+            {
+                showScore ? <div> <h2>Your Score is {score} /{ashish.length}</h2> </div> :
+                    <>
+                        <div className="question-number"> <h1> Question  {index + 1}/{ashish.length}</h1></div>
+                        <div className="question"> <h3>{ashish[index].question}</h3></div>
+                        <div className='option'>
+                            {
+                                ashish[index].answer.map((ans, index) => {
+                                    return (
+                                        <div key={index}>
+                                            <button onClick={()=>handlAns(ans.isCorrect)}>{ans.answerText}</button>
+                                        </div>
+                                    )
+                                })
+                            }
+
+                        </div>
+                    </>
+            }
+        </div>
+
+
+    )
+
+};
+export default Quiz;
